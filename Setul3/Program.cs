@@ -14,7 +14,7 @@ namespace Set3
         private static Random rnd = new Random();
         private static List<string> instructions = new List<string>()
         {
-            "Acesta este lista cu instructiuni pentru setul 3:" ,
+            "Aceasta este lista cu instructiuni pentru setul 3:" ,
             "Calculati suma elementelor unui vector de n numere citite de la tastatura. Rezultatul se va afisa pe ecran.",
             "Se da un vector cu n elemente si o valoare k. Se cere sa se determine prima pozitie din vector pe care apare k. Daca k nu apare in vector rezultatul va fi -1.",
             "Sa se determine pozitiile dintr-un vector pe care apar cel mai mic si cel mai mare element al vectorului. Pentru extra-credit realizati programul efectuand 3n/2 comparatii (in cel mai rau caz).",
@@ -341,7 +341,26 @@ namespace Set3
         static void P11()
         {
             Console.WriteLine(instructions[11]);
-            var array = ReadArray();
+            Console.Write("Dati n:");
+            int n = int.Parse(Console.ReadLine());
+            bool[] ciur = new bool[n + 1];
+
+
+            ciur[0] = ciur[1] = true;
+            for (int i = 2; i * i <= n; i++)
+            {
+                if (!ciur[i])
+                    for (int j = 2; j <= n / i; j++)
+                        ciur[i * j] = true;
+            }
+
+            int counter = 0;
+            for (int i = 2; i <= n; i++)
+                if (!ciur[i])
+                    counter++;
+
+            Console.WriteLine($"Sunt {counter} numere prime mai mici decat numarul {n}");
+            
         }
 
         /// <summary>
@@ -506,6 +525,19 @@ namespace Set3
         private static void P18()
         {
             Console.WriteLine(instructions[18]);
+            var polinom = ReadArray();
+            Console.WriteLine("Dati x: ");
+            int x = int.Parse(Console.ReadLine());
+
+            long grad = 1;
+            long rezultat = 0;
+            for (int i = 0; i < polinom.Length; i++)
+            {
+                rezultat += polinom[i] * grad;
+                grad *= x;
+            }
+
+            Console.WriteLine($"Polinomul {String.Join(" ", polinom)} are valoarea {rezultat} in punctul {x}");
         }
         /// <summary>
         /// Se da un vector s (vectorul in care se cauta) si un vector p (vectorul care se cauta). Determinati de cate ori apare p in s. De ex. Daca s = [1,2,1,2,1,3,1,2,1] si p = [1,2,1] atunci p apare in s de 3 ori. (Problema este dificila doar daca o rezolvati cu un algoritm liniar). 
@@ -532,6 +564,28 @@ namespace Set3
         private static void P20()
         {
             Console.WriteLine(instructions[20]);
+            //I'm not sure if I understanded this task
+            var s1 = ReadArray("s1").ToList();
+            var s2 = ReadArray("s2").ToList();
+
+            int cntMax = 0,cnt;
+            for(int i=0;i<Math.Max(s1.Count,s2.Count);i++)
+            {
+                cnt = 0;
+                for(int j=0;j<s1.Count;j++)         
+                    if (s1[j] == s2[j])
+                        cnt++;
+
+                if(cntMax < cnt)
+                    cntMax = cnt;
+
+                if (s1.Count > s2.Count)
+                    RotateToLeft(s1, 1);
+                else
+                    RotateToLeft(s2, 1);
+            }
+
+            Console.WriteLine($"{cntMax} este numarul maxim de suprapuneri de aceeasi culoare a celor doua margele cu posibilitatea rotirilor");
         }
         /// <summary>
         /// Se dau doi vectori. Se cere sa se determine ordinea lor lexicografica (care ar trebui sa apara primul in dictionar). 
